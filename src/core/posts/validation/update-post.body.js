@@ -1,5 +1,3 @@
-
-
 /**
  * @typedef PostUpdateBody
  * @type {Object}
@@ -13,6 +11,7 @@ module.exports = {
         text: {
             type: 'string',
             minLength: 3,
+            transform: ['trim'],
             errorMessage: {
                 minLength: 'The text cannot be shorter than three characters',
             }
