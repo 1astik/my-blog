@@ -1,0 +1,259 @@
+openapi: 3.0.3
+info:
+  title: Blog
+  description: SPA description
+  version: 0.0.1
+servers:
+  - url: 'localhost:8090'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+    Post:
+      type: object
+      properties:
+        _id:
+          type: string
+        text:
+          type: string
+        author:
+          type: string
+        createdAt:
+          type: string
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+paths:
+  /signin:
+    post:
+      summary: Retrieves user's JWT
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                password:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - jwt
+                  - email
+                properties:
+                  _id:
+                    type: string
+                  email:
+                    type: string
+                    minLength: 3
+                    maxLength: 50
+                  jwt:
+                    type: string
+                  createdAt:
+                    type: string
+        '400':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /user:
+    post:
+      summary: Create user
+      tags:
+        - User management
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                password:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+              required: [ email, password ]
+      responses:
+        '201':
+          description: Create
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Not valid email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /posts:
+    get:
+      summary: Retrieves all posts
+      tags:
+        - Post management
+      parameters:
+        - in: query
+          name: limit
+          description: number of posts per page
+          schema:
+            type: integer
+        - in: query
+          name: page
+          description: page to retrieve
+          schema:
+            type: integer
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: number of posts retrieved by the query
+                  pageCount:
+                    type: integer
+                    description: number of pages retrieved by the query
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+    post:
+      summary: Create post
+      tags:
+        - Post management
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  minLength: 3
+              required: [ text ]
+      responses:
+        '201':
+          description: Create
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /posts/{postId}:
+    patch:
+      summary: Update post
+      tags:
+        - Post management
+      parameters:
+        - in: path
+          required: true
+          name: postId
+          schema:
+            type: string
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  minLength: 3
+      responses:
+        '201':
+          description: Update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+    delete:
+      summary: Delete post
+      tags:
+        - Post management
+      parameters:
+        - in: path
+          required: true
+          name: postId
+          schema:
+            type: string
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
