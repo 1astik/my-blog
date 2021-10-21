@@ -4,6 +4,9 @@ const validation = require('./validation')
 const {asyncHttpWrapper} = require('utils/error-wrappers')
 const {validationId} = require('utils/validation')
 const {EntityNotExists} = require('utils/error')
+const fs = require("fs");
+const logger = require('@logger')
+const path = require("path");
 
 module.exports.uploadMedia = asyncHttpWrapper(
     /**
@@ -23,6 +26,8 @@ module.exports.uploadMedia = asyncHttpWrapper(
         const post = await postService.getPostById(req.params.postId, req.user._id)
 
         if (!post){
+            fs.rm(path.resolve(__dirname, '../../../uploads', fileStat.fileName), err =>err && logger.error(err))
+
             throw new EntityNotExists('Post not found')
         }
 
