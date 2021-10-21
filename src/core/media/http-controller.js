@@ -1,7 +1,9 @@
 const mediaService = require('./service')
+const postService = require('../posts/service')
 const validation = require('./validation')
 const {asyncHttpWrapper} = require('utils/error-wrappers')
 const {validationId} = require('utils/validation')
+const {EntityNotExists} = require('utils/error')
 
 module.exports.uploadMedia = asyncHttpWrapper(
     /**
@@ -16,6 +18,12 @@ module.exports.uploadMedia = asyncHttpWrapper(
         const fileStat = {
             fileName: req.file.filename,
             fileType: req.file.originalname.split('.')[1]
+        }
+
+        const post = await postService.getPostById(req.params.postId, req.user._id)
+
+        if (!post){
+            throw new EntityNotExists('Post not found')
         }
 
         await mediaService.uploadMedia({positionInText: req.body.positionInText, postId: req.params.postId}, fileStat)

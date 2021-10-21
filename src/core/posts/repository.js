@@ -26,10 +26,15 @@ const findPosts = (options) => Post.aggregate([
     ]
 )
 
+const getPostById = (postId, userId) => Post
+    .find({_id: postId, author: userId})
+    .lean()
+
 
 module.exports = {
     savePost,
     findPosts,
     updatePost,
     deletePost,
+    getPostById
 }

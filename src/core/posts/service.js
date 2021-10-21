@@ -48,9 +48,14 @@ async function deletePost(postId) {
     postEvents.deletedPost(deletedPost)
 }
 
+async function getPostById(postId, userId){
+    return postRepository.getPostById(postId, userId)
+}
+
 module.exports = {
     createPost,
     getPosts,
     updatePost,
-    deletePost
+    deletePost,
+    getPostById
 }
