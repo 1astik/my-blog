@@ -73,14 +73,21 @@ const downloadGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db
 
 const deleteGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: config.bucketName.media}).delete(ObjectId(gridFsId))
 
-const deleteMedia = postId => Media
+const deleteMediaByPostId = postId => Media
     .deleteMany({postId: ObjectId(postId)})
 
-const findMedia = postId => Media
+const findMediaByPostId = postId => Media
     .find({postId: ObjectId(postId)})
     .select({gridFsId: 1})
     .lean()
 
+const findMediaById = mediaId => Media
+    .findOne(ObjectId(mediaId))
+    .select({gridFsId: 1})
+    .lean()
+
+const deleteMediaById = mediaId => Media
+    .deleteOne({postId: ObjectId(mediaId)})
 
 module.exports = {
     saveMedia,
@@ -88,7 +95,9 @@ module.exports = {
     setGridFsId,
     findGridFsById,
     downloadGridFsById,
-    deleteMedia,
+    deleteMediaByPostId,
     deleteGridFsById,
-    findMedia
+    findMediaByPostId,
+    findMediaById,
+    deleteMediaById
 }

@@ -33,7 +33,7 @@ async function findMedia(gridFsId) {
 }
 
 async function deleteMediaByPostId(postId){
-    const media = await mediaRepository.findMedia(postId)
+    const media = await mediaRepository.findMediaByPostId(postId)
 
     const promises = media.map(({gridFsId}) => {
         const promises = []
@@ -43,14 +43,28 @@ async function deleteMediaByPostId(postId){
         return Promise.all(promises)
     })
 
-    promises.push(mediaRepository.deleteMedia(postId))
+    promises.push(mediaRepository.deleteMediaByPostId(postId))
 
     return void (await Promise.all(promises))
+}
+
+async function deleteMediaById(mediaId){
+    const media = await mediaRepository.findMediaById(mediaId)
+
+    if (!media) {
+        throw new EntityNotExists('Media not found')
+    }
+
+    await Promise.all([
+        mediaRepository.deleteMediaById(mediaId),
+        mediaRepository.deleteGridFsById(media.gridFsId)
+    ])
 }
 
 
 module.exports = {
     uploadMedia,
     findMedia,
-    deleteMediaByPostId
+    deleteMediaByPostId,
+    deleteMediaById
 }

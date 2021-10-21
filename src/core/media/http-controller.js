@@ -60,3 +60,17 @@ module.exports.downloadMedia = asyncHttpWrapper(
             .pipe(res)
     }
 )
+
+module.exports.deleteMedia = asyncHttpWrapper(
+    /**
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     */
+    async(req, res) => {
+        validationId(req.params.mediaId)
+
+        await mediaService.deleteMediaById(req.params.mediaId)
+
+        res.status(200).json({message: `Media deleted`})
+    }
+)

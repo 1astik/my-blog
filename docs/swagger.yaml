@@ -280,4 +280,81 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Message'
+  /media/{postId}:
+    post:
+      summary: Upload media
+      tags:
+        - Media management
+      parameters:
+        - in: path
+          required: true
+          name: postId
+          schema:
+            type: string
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                positionInText:
+                  type: string
+                  minLength: 3
+              required: [ positionInText ]
+      responses:
+        '201':
+          description: OK
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /media/{gridFsId}:
+    get:
+      summary: Get media
+      tags:
+        - Media management
+      parameters:
+        - in: path
+          required: true
+          name: gridFsId
+          schema:
+            type: string
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '201':
+          description: Response is media file
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /media/{mediaId}:
+    delete:
+      summary: Delete media
+      tags:
+        - Media management
+      parameters:
+        - in: path
+          required: true
+          name: mediaId
+          schema:
+            type: string
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '201':
+          description: Ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
 
