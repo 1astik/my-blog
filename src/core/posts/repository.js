@@ -15,8 +15,10 @@ const deletePost = postId => Post
     .lean()
 
 const findPosts = (options) => Post.aggregate([
-    { $lookup: { from: "media", localField: "_id", foreignField: "postId", as: "result" } },
-    { $project: { "author":1, _id:1, "text": 1, "media": "$result" } },
+    { $lookup: { from: "media", localField: "_id", foreignField: "postId", as: "media" } },
+    { $lookup: { from: "users", localField: "author", foreignField: "_id", as: "user" } },
+    {$unwind : "$user"},
+    { $project: { "author":"$user.email", _id:1, "text": 1, "media": "$media" } },
     { $facet: {
             metadata: [ { $count: "total" }, { $addFields: { page: options.page } } ],
             data: [ { $skip: options.skip }, { $limit: options.limit } ]

@@ -32,10 +32,29 @@ components:
           type: string
         createdAt:
           type: string
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
     Message:
       type: object
       properties:
         message:
+          type: string
+    Media:
+      type: object
+      properties:
+        _id:
+          type: string
+        positionInText:
+          type: string
+        postId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        grifFsId:
           type: string
 paths:
   /signin:
@@ -160,13 +179,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  total:
-                    type: integer
-                    description: number of posts retrieved by the query
-                  pageCount:
-                    type: integer
-                    description: number of pages retrieved by the query
-                  posts:
+                  metadata:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        total:
+                          type: integer
+                        page:
+                          type: integer
+                  data:
                     type: array
                     items:
                       $ref: '#/components/schemas/Post'

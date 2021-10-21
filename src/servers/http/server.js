@@ -10,7 +10,6 @@ const routerPaths = [
     require('../../core/media')
 ]
 
-
 function createHttpServer() {
 
     const app = express()

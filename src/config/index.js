@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
     database: {
         credentials: {
-            connectionString: process.env.DB_CONNECTION || 'mongodb+srv://admin:pH6Q5E7ZjDbHmgk@cluster0.ugnuu.mongodb.net/MyBlog?retryWrites=true&w=majority'
+            connectionString: process.env.DB_CONNECTION || 'mongodb://localhost/test'
         },
         options: {
             useNewUrlParser: true,
@@ -30,5 +30,8 @@ module.exports = {
     },
     path: {
         upload_media: path.resolve(__dirname, '../../uploads')
+    },
+    bucketName: {
+        media: 'media'
     }
 };

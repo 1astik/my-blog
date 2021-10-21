@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const {ObjectId} = require('mongoose').Types
 const GridFsBucket = require('mongodb').GridFSBucket
 const fs = require('fs')
+const config = require('@config')
 
 const saveMedia = mediaData => new Media({positionInText:mediaData.positionInText, postId:ObjectId(mediaData.postId)})
     .save()
@@ -18,7 +19,7 @@ const uploadToGridFS = (
 ) =>
     new Promise((resolve, reject) => {
         try {
-            const bucket = new GridFsBucket(mongoose.connection.db, {bucketName: 'media'})
+            const bucket = new GridFsBucket(mongoose.connection.db, {bucketName: config.bucketName.media})
             const uploadStream = bucket.openUploadStream(fileName, {contentType: fileType})
 
             const downloadStream = fs.createReadStream(filePath)
@@ -66,11 +67,11 @@ const setGridFsId = (mediaId, gridFsId) => Media
     )
 
 
-const findGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: 'media'}).find({_id: ObjectId(gridFsId)}).toArray()
+const findGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: config.bucketName.media}).find({_id: ObjectId(gridFsId)}).toArray()
 
-const downloadGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: 'media'}).openDownloadStream(ObjectId(gridFsId))
+const downloadGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: config.bucketName.media}).openDownloadStream(ObjectId(gridFsId))
 
-const deleteGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: 'media'}).delete(ObjectId(gridFsId))
+const deleteGridFsById = (gridFsId) => new GridFsBucket(mongoose.connection.db, {bucketName: config.bucketName.media}).delete(ObjectId(gridFsId))
 
 const deleteMedia = postId => Media
     .deleteMany({postId: ObjectId(postId)})

@@ -1,7 +1,8 @@
 const postRepository = require('./repository')
-const mediaService = require('../media/service')
 const {ObjectId} = require('mongoose').Types
 const {EntityNotExists} = require('utils/error')
+const postEvents = require('./events')
+
 
 async function createPost(post, userId) {
     post.author = ObjectId(userId)
@@ -36,7 +37,7 @@ async function deletePost(postId) {
         throw new EntityNotExists('Post not found')
     }
 
-    await mediaService.deleteMediaByPostId(deletedPost._id)
+    postEvents.deletedPost(deletedPost)
 }
 
 module.exports = {
