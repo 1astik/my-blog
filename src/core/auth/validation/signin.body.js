@@ -1,5 +1,3 @@
-
-
 /**
  * @typedef Credentials
  * @type {Object}

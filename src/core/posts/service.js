@@ -3,11 +3,13 @@ const {ObjectId} = require('mongoose').Types
 const {EntityNotExists} = require('utils/error')
 const postEvents = require('./events')
 
-
+/**
+ * @param {{text:String}} post
+ * @param {String} userId
+ * @return {import('./Post').PostModel}
+ */
 async function createPost(post, userId) {
-    post.author = ObjectId(userId)
-
-    return await postRepository.savePost(post)
+    return await postRepository.savePost({author: ObjectId(userId), ...post})
 }
 
 async function getPosts({page = 1, limit = 20}) {
@@ -20,6 +22,12 @@ async function getPosts({page = 1, limit = 20}) {
     return postRepository.findPosts(options)
 }
 
+/**
+ * @param {String} postId
+ * @param {{text: String}} update
+ * @param {String} userId
+ * @return {import('./Post').PostModel}
+ */
 async function updatePost(postId, update, userId) {
     const updatePost = await postRepository.updatePost(postId, update, userId)
 

@@ -1,6 +1,16 @@
 const {Schema, model} = require('mongoose')
 
-
+/**
+ * @typedef PostModel
+ * @type {Object}
+ * @property {import('mongoose').ObjectId} _id
+ * @property {String} author
+ * @property {String} text
+ * @property {Date} updatedAt
+ * @property {Date} createdAt
+ *
+ * @typedef {PostModel} PostModel
+ */
 const PostSchema = new Schema(
     {
         author: {
