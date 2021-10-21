@@ -20,14 +20,14 @@ const findPosts = (options) => Post.aggregate([
     {$unwind : "$user"},
     { $project: { "author":"$user.email", _id:1, "text": 1, "media": "$media" } },
     { $facet: {
-            metadata: [ { $count: "total" }, { $addFields: { page: options.page } } ],
+            metadata: [ { $count: "total" }, { $addFields: { page: options.page, limit: options.limit } } ],
             data: [ { $skip: options.skip }, { $limit: options.limit } ]
         } }
     ]
 )
 
 const getPostById = (postId, userId) => Post
-    .find({_id: postId, author: userId})
+    .findOne({_id: postId, author: userId})
     .lean()
 
 

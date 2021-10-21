@@ -188,6 +188,8 @@ paths:
                           type: integer
                         page:
                           type: integer
+                        limit:
+                          type: integer
                   data:
                     type: array
                     items:
