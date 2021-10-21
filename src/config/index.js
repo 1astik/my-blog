@@ -21,7 +21,7 @@ module.exports = {
     },
     server: {
         HTTP: {
-            PORT: process.env.PORT || 8090
+            PORT: process.env.HTTP_PORT || 8090
         },
         CORS: {
             ALLOWED_HEADERS: ['origin', 'authorization', 'content-type'],
